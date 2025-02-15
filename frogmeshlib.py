@@ -52,10 +52,11 @@ class MeshtasticClient():
                     #print('Sender error')
                     longname = None
                 try:
-                    t = datetime.datetime.fromtimestamp(packet['rxTime']).strftime('%Y-%m-%d %H:%M:%S')
+                    #t = datetime.datetime.fromtimestamp(packet['rxTime']).strftime('%Y-%m-%d %H:%M:%S')
+                    t = packet['rxTime']
                 except KeyError:
                     #print('Time error')
-                    t = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+                    t = time.time()
                 self.rec = {
                     'senderid': sender,
                     'sender': longname,
@@ -96,10 +97,10 @@ class MeshtasticClient():
                     #print('Sender error')
                     longname = None
                 try:
-                    t = datetime.datetime.fromtimestamp(packet['rxTime']).strftime('%Y-%m-%d %H:%M:%S')
+                    t = packet['rxTime']
                 except KeyError:
                     #print('Time error')
-                    t = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+                    t = time.time()
                 self.rec = {
                     'senderid': sender,
                     'sender': longname,
@@ -131,10 +132,10 @@ class MeshtasticClient():
                     #print('Sender error')
                     longname = None
                 try:
-                    t = datetime.datetime.fromtimestamp(packet['rxTime']).strftime('%Y-%m-%d %H:%M:%S')
+                    t = packet['rxTime']
                 except KeyError:
                     #print('Time error')
-                    t = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+                    t = time.time()
                 self.rec = {
                     'senderid': sender,
                     'sender': longname,
@@ -182,8 +183,40 @@ if __name__ == "__main__":
     client.checkMail()
     client.meshint.sendText("Test", wantAck=True)
     client.meshint.sendText("DM Test", destinationId='!xxxxxx', wantAck=True)
-    #client.meshint.sendText("Test", channelIndex=0, wantAck=True)
     client.meshint.sendPosition(latitude=45, longitude=-73, altitude=20, wantAck=True)
     client.meshint.sendData(b'[TestData]',portNum=258, wantAck=True) #256-511 for private apps
     client.meshint.sendPosition(latitude=0.0, longitude=0.0, altitude=0, timeSec=0, destinationId='^all', wantAck=False, wantResponse=False)
     client.meshint.close()
+
+    #client.meshint.sendText(
+    # text: str, 
+    # destinationId: Union[int, str] = '^all', 
+    # wantAck: bool = False, 
+    # wantResponse: bool = False, 
+    # onResponse: Optional[Callable[[dict], Any]] = None, 
+    # channelIndex: int = 0)
+
+    #client.meshint.sendPosition(
+    # latitude: float = 0.0, 
+    # longitude: float = 0.0, 
+    # altitude: int = 0, 
+    # destinationId: Union[int, str] = '^all', 
+    # wantAck: bool = False, 
+    # wantResponse: bool = False, 
+    # channelIndex: int = 0)
+
+    #client.meshint.sendData(
+    # data, 
+    # destinationId: Union[int, str] = '^all', 
+    # portNum: int = 256, 
+    # wantAck: bool = False, 
+    # wantResponse: bool = False, 
+    # onResponse: Optional[Callable[[dict], Any]] = None, 
+    # onResponseAckPermitted: bool = False, 
+    # channelIndex: int = 0, 
+    # hopLimit: Optional[int] = None, 
+    # pkiEncrypted: Optional[bool] = False, 
+    # publicKey: Optional[bytes] = None)
+
+    """Keyword Arguments: data – the data to send, either as an array of bytes or as a protobuf (which will be automatically serialized to bytes) destinationId {nodeId or nodeNum} – where to send this message (default: {BROADCAST_ADDR}) portNum – the application portnum (similar to IP port numbers) of the destination, see portnums.proto for a list wantAck – True if you want the message sent in a reliable manner (with retries and ack/nak provided for delivery) wantResponse – True if you want the service on the other side to send an application layer response onResponse – A closure of the form funct(packet), that will be called when a response packet arrives (or the transaction is NAKed due to non receipt) onResponseAckPermitted – should the onResponse callback be called for regular ACKs (True) or just data responses & NAKs (False) Note that if the onResponse callback is called 'onAckNak' this will implicitly be true. channelIndex – channel number to use hopLimit – hop limit to use"""
+
